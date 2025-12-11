@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style2.css">
+    <script defer src="script2.js"></script>
+    <title>Shibbs Quiz</title>
+</head>
+<body class=""> 
+    <!-- Toggle Switch -->
+    <label class="switch">
+        <input type="checkbox">
+        <span class="slider round"></span>
+    </label>
+
+    <div class="container ">
+        <div class="hide" id="question-container">
+            <div id="question">Question</div>
+            <div id="answer-buttons" class="btn-grid">
+            </div>
+        </div>
+        <div class="answers flex-styling"></div>
+        <div class="actionBtns-container">
+            <button class="buttons" id="start-btn">Let's go!</button>
+            <button class="buttons hide" id="next-btn">Next Question</button>
+            <button class="buttons hide" id="show-results-btn">Show Results</button>
+        </div>
+        <div id="result-container" class="hide">
+            <h2></h2>
+            <div id="results"></div>
+        </div>
+    </div>
+</body>
+</html>
