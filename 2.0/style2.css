@@ -27,7 +27,7 @@ body {
     flex-direction: column;
     align-items: center;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.6);
 }
 
 #answer-buttons {
@@ -55,6 +55,20 @@ body {
 .buttons:hover {
     background-color: purple;
     color: white;
+    cursor: pointer;
+}
+
+#next-btn {
+    background-color: transparent;
+    padding: 0;
+    margin: 0;
+}
+
+#next-btn:hover {
+    transform: scale(1.1);
+}
+
+label:hover {
     cursor: pointer;
 }
 

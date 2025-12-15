@@ -32,11 +32,12 @@ function startGame() {
 }
 
 function countPoints() {
-    let allSelectedAnswers = document.querySelectorAll("input[name=answer]:checked");
-    allSelectedAnswers.forEach(answer => {
-        if (answer.dataset.correct === "true") {
-            score++;
-        }
+    userAnswers.forEach(item => {
+        item.answers.forEach(answer => {
+            if (answer.correct) {
+                score++;
+            }
+        });
     });
 }
 
@@ -56,19 +57,16 @@ function saveAnswer(questionIndex) {
     userAnswers.push(answers);
 }
 
-
 function nextQuestion() {
     saveAnswer(currentQuestionIndex);
-    countPoints();
+
+    if (currentQuestionIndex === questionsArr.length - 1) {
+        showResults();
+        return;
+    }
 
     currentQuestionIndex++;
-
-    if (currentQuestionIndex < questionsArr.length) {
-        showQuestion(questionsArr[currentQuestionIndex]);
-    } else {
-        nextButton.classList.add("hide");
-        showResultBtn.classList.remove("hide");
-    }
+    showQuestion(questionsArr[currentQuestionIndex]);
 }
 
 function showQuestion(question) {
@@ -159,12 +157,15 @@ function renderReview() {
 }
 
 function showResults() {
-    renderReview();
     countPoints();
+    renderReview();
 
+    nextButton.classList.add("hide");
     questionContainer.classList.add("hide");
     showResultBtn.classList.add("hide");
-    document.querySelector("#result-container").classList.remove("hide");
+    resultContainer.classList.remove("hide");
+
+    resultContainer.innerHTML = "";
     
     const grade = setColourGrade();
     const gradeMessage = document.createElement("h2");
@@ -220,7 +221,7 @@ const questionsArr = [
             { text: "Oath-taking disciples", correct: false }]
     },
     {   type: "oneCorrect",
-        question: "Who is the face behind Mike Myers legendary mask in Halloween?",
+        question: "Who is the face behind Michael Myers legendary mask in Halloween?",
         answers: [
             { text: "William Shatner", correct: true },
             { text: "Leonard Nimoy", correct: false },
