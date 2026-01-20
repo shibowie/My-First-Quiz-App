@@ -32,9 +32,11 @@ function startGame() {
 }
 
 function countPoints() {
+    score = 0;
+
     userAnswers.forEach(item => {
         item.answers.forEach(answer => {
-            if (answer.correct) {
+            if (answer.correct && answer.selected) {
                 score++;
             }
         });
@@ -42,19 +44,26 @@ function countPoints() {
 }
 
 function saveAnswer(questionIndex) {
-    const checked = [
+    const checkedInputs = [
         ...document.querySelectorAll('[name="answer"]:checked')
     ];
 
-    const answers = {
-        question: questionsArr[questionIndex].question,
-        answers: checked.map(input => ({
-            text: questionsArr[questionIndex].answers[parseInt(input.id.replace("answer", ""))].text || "unknown",
-            correct: input.dataset.correct === "true"
-        }))
-    };
+    const answers = questionsArr[questionIndex].answers.map((answer, index) => {
+        const wasSelected = checkedInputs.some(
+            input => parseInt(input.id.replace("answer", "")) === index
+        );
 
-    userAnswers.push(answers);
+        return {
+            text: answer.text || answer.img || "unknown",
+            correct: answer.correct,
+            selected: wasSelected
+        };
+    });
+
+    userAnswers.push({
+        question: questionsArr[questionIndex].question,
+        answers
+    });
 }
 
 function nextQuestion() {
@@ -134,24 +143,41 @@ function setColourGrade() {
 
 function renderReview() {
     const container = document.querySelector("#results");
+    if (!container) return;
+
     container.innerHTML = "";
 
-    userAnswers
-        .filter(item => item.answers.some(answer => answer.correct))
-        .forEach(item => {
+    userAnswers.forEach(item => {
         const qDiv = document.createElement("div");
         qDiv.classList.add("review-question");
-        
-        qDiv.innerHTML = `
-            <h4>${item.question}</h4>
-            <ul>
-                ${item.answers.map(a => `
-                <li class="${a.correct ? 'correct' : 'wrong'}">
-                    ${a.text}
-                </li>
-                `).join("")}
-            </ul>`;
 
+        const h4 = document.createElement("h4");
+        h4.innerText = item.question;
+        qDiv.appendChild(h4);
+
+        const ul = document.createElement("ul");
+
+        item.answers.forEach(answer => {
+            const li = document.createElement("li");
+            li.innerText = answer.text;
+
+            if (answer.correct && answer.selected) {
+                li.style.color = "mediumseagreen";
+                li.innerText += " ✔ (ditt svar)";
+            }
+            else if (!answer.correct && answer.selected) {
+                li.style.color = "crimson";
+                li.innerText += " ✖ (ditt svar)";
+            }
+            else if (answer.correct && !answer.selected) {
+                li.style.color = "dodgerblue";
+                li.innerText += " ✔ (rätt svar)";
+            }
+
+            ul.appendChild(li);
+        });
+
+        qDiv.appendChild(ul);
         container.appendChild(qDiv);
     });
 }
@@ -164,8 +190,6 @@ function showResults() {
     questionContainer.classList.add("hide");
     showResultBtn.classList.add("hide");
     resultContainer.classList.remove("hide");
-
-    resultContainer.innerHTML = "";
     
     const grade = setColourGrade();
     const gradeMessage = document.createElement("h2");
