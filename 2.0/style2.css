@@ -10,7 +10,7 @@
 }
 
 body {
-    background-image: url(/2.0/images/background.jpg);
+    background-image: url(./images/background.jpg);
     width: 100%;
     min-height: 100vh;
     display: flex;
