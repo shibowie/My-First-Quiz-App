@@ -15,21 +15,27 @@
     </label>
 
     <div class="container ">
+        
+        <h1 id="welcome">WELCOME TO THE SHIBBS QUIZ!</h1>
+        <p id="random-quiz">This quiz is quite random. Mostley fun facts that you might not know, or maybe you do. Good luck! I’ll see you on the other side.</p>
+        
         <div class="hide" id="question-container">
             <div id="question">Question</div>
-            <div id="answer-buttons" class="btn-grid">
-            </div>
+            <img id="question-image" class="hide" src="">
+            <div id="answer-buttons" class="btn-grid"></div>
         </div>
+        
         <div class="answers flex-styling"></div>
         <div class="actionBtns-container">
             <button class="buttons" id="start-btn">Let's go!</button>
-            <button class="buttons hide" id="next-btn">Next Question</button>
+            <button class="buttons hide" id="next-btn"><img src="./images/right-arrow.png"></button>
             <button class="buttons hide" id="show-results-btn">Show Results</button>
         </div>
+        
         <div id="result-container" class="hide">
-            <h2></h2>
             <div id="results"></div>
         </div>
+    
     </div>
 </body>
 </html>
