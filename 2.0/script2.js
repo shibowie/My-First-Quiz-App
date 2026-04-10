@@ -92,46 +92,57 @@ function showQuestion(question) {
 
     if (question.img) {
         questionImage.src = question.img;
-        questionImage.classList.add("question-img");
         questionImage.classList.remove("hide");
     } else {
         questionImage.src = "";
         questionImage.classList.add("hide");
-    
+    }
+
+    // Visa eller göm nästa-knappen beroende på frågetyp
+    if (question.type === "oneCorrect") {
+        nextButton.classList.add("hide");
+    } else {
+        nextButton.classList.remove("hide");
+    }
 
     question.answers.forEach((answer, index) => {
-        if (question.type === "imageChoice") {
-            const input = document.createElement("input");
-            input.type = "radio";
-            input.name = "answer";
-            input.id = "answer" + index;
-            input.classList.add("radio-img");
-            input.dataset.correct = answer.correct;
+        const input = document.createElement("input");
+        input.type = question.type === "oneCorrect" ? "radio" : "checkbox";
+        input.name = "answer";
+        input.id = "answer" + index;
+        input.dataset.correct = answer.correct;
 
-            const label = document.createElement("label");
-            label.htmlFor = input.id;
+        const label = document.createElement("label");
+        label.htmlFor = input.id;
+
+        if (question.type === "imageChoice") {
+            input.type = "radio";
 
             const img = document.createElement("img");
             img.src = answer.img;
             img.classList.add("img-answer");
+
             label.appendChild(img);
-
-            answerButtons.append(input, label);
+            label.classList.add("btn-answer", "btn-image");
         } else {
-            const button = document.createElement("input");
-            const answerType = question.type === "oneCorrect" ? "radio" : "checkbox";
-            button.type = answerType;
-            button.name = "answer";
-            button.id = "answer" + index;
-            button.classList.add("buttons");
-            button.dataset.correct = answer.correct;
-
-            const label = document.createElement("label");
-            label.htmlFor = button.id;
             label.innerText = answer.text;
-            
-            answerButtons.append(button, label);
+            label.classList.add("btn-answer");
+
+            if (answer.text === "True") {
+                label.classList.add("btn-true");
+            } else if (answer.text === "False") {
+                label.classList.add("btn-false");
+            }
         }
+
+        // Hoppa vidare direkt för frågor med ett val
+        if (question.type === "oneCorrect" || question.type === "imageChoice") {
+            input.addEventListener("change", () => {
+                nextQuestion();
+            });
+        }
+
+        answerButtons.append(input, label);
     });
 }
 
@@ -342,4 +353,4 @@ const questionsArr = [
             { text: "Whipped cream recommended to treat muscle cramps", correct: false },
             { text: "Chocolate as a treatment for stomach issues", correct: true }]
     }
-]};
+];
